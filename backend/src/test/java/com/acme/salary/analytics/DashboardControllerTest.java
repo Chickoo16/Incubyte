@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
@@ -27,39 +26,42 @@ class DashboardControllerTest {
     private AnalyticsService analyticsService;
 
     @Test
-    void summaryReturnsOrgWideStatsWhenNoFiltersGiven() throws Exception {
+    void summaryFlagsMixedCurrenciesWhenNoFiltersGiven() throws Exception {
         when(analyticsService.summary(isNull(), isNull(), isNull()))
-                .thenReturn(new SalaryStats(3, new BigDecimal("30000"), new BigDecimal("70000"),
-                        new BigDecimal("50000"), new BigDecimal("50000")));
+                .thenReturn(new CurrencyAwareStats(new SalaryStats(3, new BigDecimal("30000"),
+                        new BigDecimal("70000"), new BigDecimal("50000"), new BigDecimal("50000")), "MIXED"));
 
         mockMvc.perform(get("/api/dashboard/summary"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.count").value(3))
-                .andExpect(jsonPath("$.average").value(50000.0));
+                .andExpect(jsonPath("$.stats.count").value(3))
+                .andExpect(jsonPath("$.currency").value("MIXED"));
     }
 
     @Test
-    void summaryPassesFiltersThrough() throws Exception {
+    void summaryPassesFiltersThroughAndReportsTheSingleCurrency() throws Exception {
         when(analyticsService.summary(eq("Engineering"), eq("IN"), isNull()))
-                .thenReturn(new SalaryStats(1, new BigDecimal("50000"), new BigDecimal("50000"),
-                        new BigDecimal("50000"), new BigDecimal("50000")));
+                .thenReturn(new CurrencyAwareStats(new SalaryStats(1, new BigDecimal("50000"),
+                        new BigDecimal("50000"), new BigDecimal("50000"), new BigDecimal("50000")), "INR"));
 
         mockMvc.perform(get("/api/dashboard/summary")
                         .param("department", "Engineering")
                         .param("country", "IN"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.count").value(1));
+                .andExpect(jsonPath("$.stats.count").value(1))
+                .andExpect(jsonPath("$.currency").value("INR"));
     }
 
     @Test
-    void breakdownReturnsStatsPerGroup() throws Exception {
+    void breakdownReturnsStatsPerGroupWithCurrency() throws Exception {
         when(analyticsService.breakdownBy(GroupDimension.DEPARTMENT)).thenReturn(List.of(
-                new GroupedSalaryStats("Engineering", new SalaryStats(2, new BigDecimal("50000"),
-                        new BigDecimal("70000"), new BigDecimal("60000"), new BigDecimal("60000")))));
+                new GroupedSalaryStats("Engineering", new CurrencyAwareStats(new SalaryStats(2,
+                        new BigDecimal("50000"), new BigDecimal("70000"), new BigDecimal("60000"),
+                        new BigDecimal("60000")), "INR"))));
 
         mockMvc.perform(get("/api/dashboard/breakdown").param("by", "DEPARTMENT"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].group").value("Engineering"))
-                .andExpect(jsonPath("$[0].stats.average").value(60000.0));
+                .andExpect(jsonPath("$[0].stats.stats.average").value(60000.0))
+                .andExpect(jsonPath("$[0].stats.currency").value("INR"));
     }
 }

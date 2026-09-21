@@ -14,15 +14,27 @@ public class AnalyticsService {
         this.employeeRepository = employeeRepository;
     }
 
-    public SalaryStats summary(String department, String country, String jobTitle) {
-        return SalaryStatsCalculator.compute(employeeRepository.grossAmounts(department, country, jobTitle));
+    public CurrencyAwareStats summary(String department, String country, String jobTitle) {
+        SalaryStats stats = SalaryStatsCalculator.compute(
+                employeeRepository.grossAmounts(department, country, jobTitle));
+        return new CurrencyAwareStats(stats, currencyLabel(department, country, jobTitle));
+    }
+
+    private String currencyLabel(String department, String country, String jobTitle) {
+        List<String> currencies = employeeRepository.distinctCurrencies(department, country, jobTitle);
+        return switch (currencies.size()) {
+            case 0 -> null;
+            case 1 -> currencies.get(0);
+            default -> CurrencyAwareStats.MIXED;
+        };
     }
 
     /**
-     * One {@link SalaryStats} per distinct value of the given dimension. A
-     * handful of extra queries (one per distinct department/country/job
-     * title) rather than a single grouped one - simpler to read, and cheap
-     * given the low cardinality of these dimensions.
+     * One {@link CurrencyAwareStats} per distinct value of the given
+     * dimension. A handful of extra queries (one per distinct
+     * department/country/job title) rather than a single grouped one -
+     * simpler to read, and cheap given the low cardinality of these
+     * dimensions.
      */
     public List<GroupedSalaryStats> breakdownBy(GroupDimension dimension) {
         return switch (dimension) {

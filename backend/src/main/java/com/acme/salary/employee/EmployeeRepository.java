@@ -45,6 +45,23 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                                    @Param("country") String country,
                                    @Param("jobTitle") String jobTitle);
 
+    /**
+     * Which currencies the matching active employees are paid in. Salaries
+     * are never converted across currencies (see requirements), so callers
+     * use this to tell a meaningful single-currency figure apart from one
+     * that silently blends incompatible currencies.
+     */
+    @Query("""
+            SELECT DISTINCT e.currency FROM Employee e
+            WHERE e.status = com.acme.salary.employee.EmployeeStatus.ACTIVE
+              AND (:department IS NULL OR e.department = :department)
+              AND (:country IS NULL OR e.country = :country)
+              AND (:jobTitle IS NULL OR e.jobTitle = :jobTitle)
+            """)
+    List<String> distinctCurrencies(@Param("department") String department,
+                                     @Param("country") String country,
+                                     @Param("jobTitle") String jobTitle);
+
     @Query("""
             SELECT DISTINCT e.department FROM Employee e
             WHERE e.status = com.acme.salary.employee.EmployeeStatus.ACTIVE

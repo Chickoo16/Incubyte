@@ -108,4 +108,23 @@ class EmployeeRepositoryTest {
         assertThat(repository.distinctCountries()).containsExactly("IN", "US");
         assertThat(repository.distinctJobTitles()).containsExactly("Account Executive", "Engineer");
     }
+
+    private Employee employeeWithCurrency(String code, String country, String currency) {
+        Employee employee = new Employee(
+                code, "First" + code, "Last" + code, code + "@acme.example",
+                "Engineering", "Engineer", country, currency,
+                LocalDate.of(2021, 1, 1), new BigDecimal("50000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        return employee;
+    }
+
+    @Test
+    void distinctCurrenciesReflectsOnlyActiveEmployeesMatchingFilters() {
+        repository.save(employeeWithCurrency("E001", "IN", "INR"));
+        repository.save(employeeWithCurrency("E002", "US", "USD"));
+
+        assertThat(repository.distinctCurrencies(null, null, null))
+                .containsExactlyInAnyOrder("INR", "USD");
+        assertThat(repository.distinctCurrencies(null, "IN", null))
+                .containsExactly("INR");
+    }
 }

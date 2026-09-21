@@ -1,4 +1,4 @@
 package com.acme.salary.analytics;
 
-public record GroupedSalaryStats(String group, SalaryStats stats) {
+public record GroupedSalaryStats(String group, CurrencyAwareStats stats) {
 }

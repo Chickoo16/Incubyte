@@ -18,7 +18,7 @@ public class DashboardController {
     }
 
     @GetMapping("/summary")
-    public SalaryStats summary(
+    public CurrencyAwareStats summary(
             @RequestParam(required = false) String department,
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String jobTitle) {
