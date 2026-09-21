@@ -1,0 +1,21 @@
+services:
+  api:
+    build:
+      context: ./backend
+    environment:
+      - SALARY_DB_PATH=/data/salary.db
+    volumes:
+      - salary-data:/data
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  salary-data:
