@@ -60,11 +60,15 @@ access control in this version.
   can produce; the repo will include a demo script/checklist the candidate can record against.
 
 ## Technical Approach
-- **Backend:** Java 17, Spring Boot 3, Spring Data JPA, SQLite (file-based, zero infra to run).
-- **Frontend:** Angular, Angular Material, server-side pagination against the API.
+- **Backend:** Java 21, Spring Boot 4.1 (current stable at time of writing), Spring Data JPA,
+  SQLite (file-based, zero infra to run) via `sqlite-jdbc` + Hibernate's community SQLite
+  dialect. A single Hikari connection, since SQLite allows only one writer at a time.
+- **Frontend:** Angular 22 (current stable), Angular Material, server-side pagination against
+  the API.
 - **Testing (TDD):** JUnit 5 + Mockito for backend unit tests (salary calculation logic first,
   as pure functions), slice tests (`@DataJpaTest`, `@WebMvcTest`) over full context boots for
-  speed; Jasmine/Karma for Angular component/service tests. Tests are written before the
-  implementation they cover, and commits show red → green progression.
+  speed; Angular's built-in Vitest runner for component/service tests (the CLI's current
+  default, superseding Jasmine/Karma). Tests are written before the implementation they cover,
+  and commits show red → green progression.
 - **Packaging:** Docker Compose bundling backend (Spring Boot jar) and frontend (Angular build
   behind nginx), single command to run the whole stack.
