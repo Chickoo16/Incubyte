@@ -1,0 +1,61 @@
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+@if (employee(); as employee) {
+  <button mat-button (click)="back()">
+    <mat-icon>arrow_back</mat-icon>
+    Back to employees
+  </button>
+
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>{{ employee.firstName }} {{ employee.lastName }}</mat-card-title>
+      <mat-card-subtitle>{{ employee.employeeCode }} &middot; {{ employee.jobTitle }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="profile-grid">
+      <div><span class="label">Email</span>{{ employee.email }}</div>
+      <div><span class="label">Department</span>{{ employee.department }}</div>
+      <div><span class="label">Country</span>{{ employee.country }}</div>
+      <div><span class="label">Currency</span>{{ employee.currency }}</div>
+      <div><span class="label">Date of joining</span>{{ employee.dateOfJoining }}</div>
+      <div>
+        <span class="label">Status</span>
+        <span class="status" [class.inactive]="employee.status === 'INACTIVE'">{{ employee.status }}</span>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-stroked-button (click)="toggleStatus()">
+        {{ employee.status === 'ACTIVE' ? 'Deactivate' : 'Reactivate' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card class="salary-card">
+    <mat-card-header>
+      <mat-card-title>Salary</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="salary-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Basic</mat-label>
+        <input matInput type="number" [(ngModel)]="basic" min="0" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Allowances</mat-label>
+        <input matInput type="number" [(ngModel)]="allowances" min="0" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Deductions</mat-label>
+        <input matInput type="number" [(ngModel)]="deductions" min="0" />
+      </mat-form-field>
+
+      <div class="preview">
+        <div><span class="label">Gross</span>{{ previewGross() }} {{ employee.currency }}</div>
+        <div><span class="label">Net</span>{{ previewNet() }} {{ employee.currency }}</div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-flat-button color="primary" [disabled]="saving()" (click)="saveSalary()">Save salary</button>
+    </mat-card-actions>
+  </mat-card>
+}

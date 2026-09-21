@@ -1,0 +1,36 @@
+.profile-card,
+.salary-card {
+  margin-top: 1rem;
+  max-width: 640px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.salary-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant, #666);
+}
+
+.preview {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.status.inactive {
+  color: var(--mat-sys-error, #b3261e);
+}
