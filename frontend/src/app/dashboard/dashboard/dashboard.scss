@@ -1,0 +1,46 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  mat-form-field {
+    min-width: 180px;
+  }
+}
+
+.summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  mat-card {
+    min-width: 200px;
+  }
+}
+
+.label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant, #666);
+}
+
+.value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.mixed-warning {
+  flex: 1 1 320px;
+  border-left: 4px solid var(--mat-sys-error, #b3261e);
+}
+
+.dimension-select {
+  margin-bottom: 0.5rem;
+}
+
+.breakdown-table {
+  width: 100%;
+}

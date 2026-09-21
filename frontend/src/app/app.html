@@ -1,1 +1,11 @@
-<router-outlet />
+<mat-toolbar color="primary">
+  <span class="title">ACME Salary Management</span>
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Employees</a>
+    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+  </nav>
+</mat-toolbar>
+
+<main>
+  <router-outlet />
+</main>

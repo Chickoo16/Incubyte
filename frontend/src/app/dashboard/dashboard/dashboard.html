@@ -1,0 +1,131 @@
+<h1>Salary dashboard</h1>
+
+<div class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Department</mat-label>
+    <mat-select [(ngModel)]="department" (selectionChange)="onFilterChange()">
+      <mat-option [value]="undefined">All</mat-option>
+      @for (department of filterOptions().departments; track department) {
+        <mat-option [value]="department">{{ department }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Country</mat-label>
+    <mat-select [(ngModel)]="country" (selectionChange)="onFilterChange()">
+      <mat-option [value]="undefined">All</mat-option>
+      @for (country of filterOptions().countries; track country) {
+        <mat-option [value]="country">{{ country }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Job title</mat-label>
+    <mat-select [(ngModel)]="jobTitle" (selectionChange)="onFilterChange()">
+      <mat-option [value]="undefined">All</mat-option>
+      @for (title of filterOptions().jobTitles; track title) {
+        <mat-option [value]="title">{{ title }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+@if (summary(); as summary) {
+  <div class="summary-cards">
+    <mat-card>
+      <mat-card-content>
+        <span class="label">Headcount</span>
+        <span class="value">{{ summary.stats.count }}</span>
+      </mat-card-content>
+    </mat-card>
+
+    @if (isMixedCurrency()) {
+      <mat-card class="mixed-warning">
+        <mat-card-content>
+          These employees are paid in more than one currency ({{ summary.currency }}), so an
+          average/median/min/max across them would be misleading. Filter by country to see a
+          meaningful figure, or use the breakdown table below, which is always single-currency
+          per row.
+        </mat-card-content>
+      </mat-card>
+    } @else {
+      <mat-card>
+        <mat-card-content>
+          <span class="label">Average gross</span>
+          <span class="value">{{ summary.stats.average | number: '1.0-2' }} {{ summary.currency }}</span>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-content>
+          <span class="label">Median gross</span>
+          <span class="value">{{ summary.stats.median | number: '1.0-2' }} {{ summary.currency }}</span>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-content>
+          <span class="label">Min / Max gross</span>
+          <span class="value">
+            {{ summary.stats.min | number: '1.0-2' }} &ndash; {{ summary.stats.max | number: '1.0-2' }}
+            {{ summary.currency }}
+          </span>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+}
+
+<h2>Breakdown</h2>
+<mat-form-field appearance="outline" class="dimension-select">
+  <mat-label>Group by</mat-label>
+  <mat-select [value]="dimension()" (selectionChange)="onDimensionChange($event.value)">
+    <mat-option value="DEPARTMENT">Department</mat-option>
+    <mat-option value="COUNTRY">Country</mat-option>
+    <mat-option value="JOB_TITLE">Job title</mat-option>
+  </mat-select>
+</mat-form-field>
+
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+<table mat-table [dataSource]="breakdown()" class="breakdown-table">
+  <ng-container matColumnDef="group">
+    <th mat-header-cell *matHeaderCellDef>Group</th>
+    <td mat-cell *matCellDef="let row">{{ row.group }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="count">
+    <th mat-header-cell *matHeaderCellDef>Headcount</th>
+    <td mat-cell *matCellDef="let row">{{ row.stats.stats.count }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="average">
+    <th mat-header-cell *matHeaderCellDef>Average</th>
+    <td mat-cell *matCellDef="let row">{{ row.stats.stats.average | number: '1.0-2' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="median">
+    <th mat-header-cell *matHeaderCellDef>Median</th>
+    <td mat-cell *matCellDef="let row">{{ row.stats.stats.median | number: '1.0-2' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="min">
+    <th mat-header-cell *matHeaderCellDef>Min</th>
+    <td mat-cell *matCellDef="let row">{{ row.stats.stats.min | number: '1.0-2' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="max">
+    <th mat-header-cell *matHeaderCellDef>Max</th>
+    <td mat-cell *matCellDef="let row">{{ row.stats.stats.max | number: '1.0-2' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="currency">
+    <th mat-header-cell *matHeaderCellDef>Currency</th>
+    <td mat-cell *matCellDef="let row">{{ row.stats.currency }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
