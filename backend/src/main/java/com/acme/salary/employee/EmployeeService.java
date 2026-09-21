@@ -51,4 +51,9 @@ public class EmployeeService {
                 criteria.department(), criteria.country(), criteria.jobTitle(),
                 criteria.status(), criteria.query(), pageable);
     }
+
+    public FilterOptions filterOptions() {
+        return new FilterOptions(
+                repository.distinctDepartments(), repository.distinctCountries(), repository.distinctJobTitles());
+    }
 }

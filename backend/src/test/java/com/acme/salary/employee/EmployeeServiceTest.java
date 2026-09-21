@@ -135,6 +135,19 @@ class EmployeeServiceTest {
     }
 
     @Test
+    void filterOptionsCollectsDistinctValuesFromTheRepository() {
+        when(repository.distinctDepartments()).thenReturn(java.util.List.of("Engineering"));
+        when(repository.distinctCountries()).thenReturn(java.util.List.of("IN", "US"));
+        when(repository.distinctJobTitles()).thenReturn(java.util.List.of("Engineer"));
+
+        FilterOptions options = service.filterOptions();
+
+        assertThat(options.departments()).containsExactly("Engineering");
+        assertThat(options.countries()).containsExactly("IN", "US");
+        assertThat(options.jobTitles()).containsExactly("Engineer");
+    }
+
+    @Test
     void createPassesAllFieldsThroughToTheNewEmployee() {
         when(repository.count()).thenReturn(0L);
         ArgumentCaptor<Employee> captor = ArgumentCaptor.forClass(Employee.class);
