@@ -92,4 +92,20 @@ class EmployeeRepositoryTest {
                 .usingElementComparator(BigDecimal::compareTo)
                 .containsExactlyInAnyOrder(new BigDecimal("50000"), new BigDecimal("70000"));
     }
+
+    @Test
+    void distinctDepartmentsCountriesAndJobTitlesCoverOnlyActiveEmployeesSortedAndDeduplicated() {
+        repository.save(employee("E001", "Engineering", "IN", "Engineer",
+                EmployeeStatus.ACTIVE, new BigDecimal("50000")));
+        repository.save(employee("E002", "Sales", "US", "Account Executive",
+                EmployeeStatus.ACTIVE, new BigDecimal("40000")));
+        repository.save(employee("E003", "Engineering", "IN", "Engineer",
+                EmployeeStatus.ACTIVE, new BigDecimal("60000")));
+        repository.save(employee("E004", "Marketing", "UK", "Marketing Lead",
+                EmployeeStatus.INACTIVE, new BigDecimal("55000")));
+
+        assertThat(repository.distinctDepartments()).containsExactly("Engineering", "Sales");
+        assertThat(repository.distinctCountries()).containsExactly("IN", "US");
+        assertThat(repository.distinctJobTitles()).containsExactly("Account Executive", "Engineer");
+    }
 }

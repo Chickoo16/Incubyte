@@ -44,4 +44,25 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<BigDecimal> grossAmounts(@Param("department") String department,
                                    @Param("country") String country,
                                    @Param("jobTitle") String jobTitle);
+
+    @Query("""
+            SELECT DISTINCT e.department FROM Employee e
+            WHERE e.status = com.acme.salary.employee.EmployeeStatus.ACTIVE
+            ORDER BY e.department
+            """)
+    List<String> distinctDepartments();
+
+    @Query("""
+            SELECT DISTINCT e.country FROM Employee e
+            WHERE e.status = com.acme.salary.employee.EmployeeStatus.ACTIVE
+            ORDER BY e.country
+            """)
+    List<String> distinctCountries();
+
+    @Query("""
+            SELECT DISTINCT e.jobTitle FROM Employee e
+            WHERE e.status = com.acme.salary.employee.EmployeeStatus.ACTIVE
+            ORDER BY e.jobTitle
+            """)
+    List<String> distinctJobTitles();
 }
