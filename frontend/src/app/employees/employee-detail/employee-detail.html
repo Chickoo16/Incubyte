@@ -50,8 +50,8 @@
       </mat-form-field>
 
       <div class="preview">
-        <div><span class="label">Gross</span>{{ previewGross() }} {{ employee.currency }}</div>
-        <div><span class="label">Net</span>{{ previewNet() }} {{ employee.currency }}</div>
+        <div><span class="label">Gross</span>{{ previewGross() | number: '1.0-2' }} {{ employee.currency }}</div>
+        <div><span class="label">Net</span>{{ previewNet() | number: '1.0-2' }} {{ employee.currency }}</div>
       </div>
     </mat-card-content>
     <mat-card-actions>

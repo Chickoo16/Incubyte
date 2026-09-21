@@ -82,6 +82,20 @@ describe('EmployeeDetail', () => {
     expect(component.previewNet()).toBe(65000);
   });
 
+  it('renders decimal salary previews without floating-point noise', () => {
+    fixture.detectChanges();
+    component.basic.set(90479.56);
+    component.allowances.set(20134.65);
+    component.deductions.set(14760.19);
+
+    fixture.detectChanges();
+
+    const text = (fixture.nativeElement as HTMLElement).querySelector('.preview')!.textContent!;
+    expect(text).toContain('110,614.21');
+    expect(text).toContain('95,854.02');
+    expect(text).not.toMatch(/\d{5,}\.\d{5,}/);
+  });
+
   it('saves the salary with the current form values', () => {
     fixture.detectChanges();
     component.basic.set(60000);

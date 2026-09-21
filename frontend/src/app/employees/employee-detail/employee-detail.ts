@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +15,7 @@ import { Employee } from '../employee.model';
 @Component({
   selector: 'app-employee-detail',
   imports: [
+    DecimalPipe,
     FormsModule,
     MatButtonModule,
     MatCardModule,
