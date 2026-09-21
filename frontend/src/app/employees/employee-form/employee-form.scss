@@ -1,0 +1,14 @@
+.form-card {
+  max-width: 720px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1rem;
+}
+
+.error {
+  color: var(--mat-sys-error, #b3261e);
+  padding: 0 1rem;
+}

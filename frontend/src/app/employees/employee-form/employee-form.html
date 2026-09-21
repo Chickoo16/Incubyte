@@ -1,0 +1,72 @@
+<mat-card class="form-card">
+  <mat-card-header>
+    <mat-card-title>Add employee</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-card-content class="grid">
+      <mat-form-field appearance="outline">
+        <mat-label>First name</mat-label>
+        <input matInput formControlName="firstName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input matInput formControlName="lastName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Department</mat-label>
+        <input matInput formControlName="department" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Job title</mat-label>
+        <input matInput formControlName="jobTitle" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" placeholder="e.g. IN" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Currency</mat-label>
+        <input matInput formControlName="currency" placeholder="e.g. INR" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Date of joining</mat-label>
+        <input matInput type="date" formControlName="dateOfJoining" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Basic</mat-label>
+        <input matInput type="number" min="0" formControlName="basic" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Allowances</mat-label>
+        <input matInput type="number" min="0" formControlName="allowances" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Deductions</mat-label>
+        <input matInput type="number" min="0" formControlName="deductions" />
+      </mat-form-field>
+    </mat-card-content>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <mat-card-actions>
+      <button mat-flat-button color="primary" type="submit" [disabled]="saving()">Create employee</button>
+      <button mat-button type="button" (click)="cancel()">Cancel</button>
+    </mat-card-actions>
+  </form>
+</mat-card>
