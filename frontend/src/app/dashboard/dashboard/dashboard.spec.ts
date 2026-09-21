@@ -100,4 +100,11 @@ describe('Dashboard', () => {
     expect(component.dimension()).toBe('COUNTRY');
     expect(dashboardService.breakdown).toHaveBeenLastCalledWith('COUNTRY');
   });
+
+  it('flags a breakdown row whose currency is mixed, so its numbers can be hidden', () => {
+    fixture.detectChanges();
+
+    expect(component.isMixedRow({ group: 'Engineering', stats: mixedSummary })).toBe(true);
+    expect(component.isMixedRow({ group: 'IN', stats: singleCurrencySummary })).toBe(false);
+  });
 });

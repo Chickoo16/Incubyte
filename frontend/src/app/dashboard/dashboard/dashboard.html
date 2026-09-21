@@ -103,22 +103,30 @@
 
   <ng-container matColumnDef="average">
     <th mat-header-cell *matHeaderCellDef>Average</th>
-    <td mat-cell *matCellDef="let row">{{ row.stats.stats.average | number: '1.0-2' }}</td>
+    <td mat-cell *matCellDef="let row">
+      {{ isMixedRow(row) ? '—' : (row.stats.stats.average | number: '1.0-2') }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="median">
     <th mat-header-cell *matHeaderCellDef>Median</th>
-    <td mat-cell *matCellDef="let row">{{ row.stats.stats.median | number: '1.0-2' }}</td>
+    <td mat-cell *matCellDef="let row">
+      {{ isMixedRow(row) ? '—' : (row.stats.stats.median | number: '1.0-2') }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="min">
     <th mat-header-cell *matHeaderCellDef>Min</th>
-    <td mat-cell *matCellDef="let row">{{ row.stats.stats.min | number: '1.0-2' }}</td>
+    <td mat-cell *matCellDef="let row">
+      {{ isMixedRow(row) ? '—' : (row.stats.stats.min | number: '1.0-2') }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="max">
     <th mat-header-cell *matHeaderCellDef>Max</th>
-    <td mat-cell *matCellDef="let row">{{ row.stats.stats.max | number: '1.0-2' }}</td>
+    <td mat-cell *matCellDef="let row">
+      {{ isMixedRow(row) ? '—' : (row.stats.stats.max | number: '1.0-2') }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="currency">

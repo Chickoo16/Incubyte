@@ -44,6 +44,10 @@ export class Dashboard implements OnInit {
 
   readonly isMixedCurrency = computed(() => this.summary()?.currency === MIXED_CURRENCY);
 
+  isMixedRow(row: GroupedSalaryStats): boolean {
+    return row.stats.currency === MIXED_CURRENCY;
+  }
+
   ngOnInit(): void {
     this.employeeService.filterOptions().subscribe((options) => this.filterOptions.set(options));
     this.loadSummary();
