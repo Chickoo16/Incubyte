@@ -1,0 +1,37 @@
+Problem Statement: 
+
+Currently, ACME org's HR team manages salary data for 10,000 employees across multiple countries, with everything 
+managed via excels, which is tedious. We want the HR manager to manage the salaries data via web-based software and be able 
+to answer questions about how the org pays people. 
+
+1. Persona is HR manager, a single internal trusted user. 
+    -> Should we include a multi-role access control? May be in other verison
+
+2. Employee Directory. 
+    -> Searchable, filters on department, country, job title, status, etc. 
+    -> Paginated list - must stay responsive at 10000 rows. 
+    -> Employee detail view showing profile, current salary structure. 
+    -> Create new employee (with intial salray stru)
+    -> Deactivate/reactivate employee (soft delete so that history stays intact). What about compliance? 
+
+3. Salary management
+    -> Structured Salary per employee. basic + allowances - deductions = net, basic + allowances = gross
+    -> HR can edit salary components. 
+    -> Each employee to have country and currency
+
+4. Analytics Dashboard
+    -> Org wide stats: headcount, avg/median gross salary. 
+    -> Filter by dept. country, job title. 
+
+5. Seeding: A script to generate 10k employees with realistic spread. 
+
+Tech Stack: 
+    -> Backend: Java 17, Spring boot 3, SQLite
+    -> Frontend: Angular
+    -> Testing: Junit + Mockito for backend unit tests. Jasmine/Karma for Angular components. Follow TDD.
+    -> Packaging: Docker Compose bundling backend (Spring Boot jar) and frontend (Angular build behind nginx), single command to run the whole stack.
+
+
+Questions: 
+	1. Since employees are across multiple countries, should there be a currency conversion feature, or only 
+    'country as an attribute' is enough? In case of country as an attribute pay would be in USD across all countries.
